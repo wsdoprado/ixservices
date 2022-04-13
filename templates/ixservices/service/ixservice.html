@@ -1,0 +1,78 @@
+{% extends 'ixservices/generic/object.html' %}
+{% load helpers %}
+{% load plugins %}
+{% load tz %}
+
+{% block breadcrumbs %}
+{{ block.super }}
+<li class="breadcrumb-item"><a href="{% url 'plugins:ixservices:ixservice_list' %}">Services</a></li>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+	<div class="col col-md-7">
+        <div class="card">
+            <h5 class="card-header">
+                Service
+            </h5>
+            <div class="card-body">
+                <table class="table table-hover attr-table">
+                    <tr>
+                        <th scope="row">Name</th>
+                        <td>{{ object.name|placeholder }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Label</th>
+                        <td>{{ object.label|placeholder }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">IX</th>
+                        <td>
+                            {% if object.ix %}
+                                <a href="{{ object.ix.get_absolute_url }}">{{ object.ix }}</a>
+                            {% else %}
+                                <span class="text-muted">None</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Type</th>
+                        <td>
+                            {% if object.service_type %}
+                                <a href="{{ object.service_type.get_absolute_url }}">{{ object.service_type }}</a>
+                            {% else %}
+                                <span class="text-muted">None</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Description</th>
+                        <td>{{ object.description|placeholder }}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        {% include 'inc/panels/custom_fields.html' %}
+        {% include 'inc/panels/tags.html' %}
+        {% include 'inc/panels/comments.html' %}
+        {% plugin_left_page object %}
+    </div>
+    <div class="col col-md-5">
+        <div class="card">
+            <h5 class="card-header">
+                Stats
+            </h5>
+            <div class="card-body">
+                <div class="row">
+                </div>
+            </div>
+        </div>
+        {% plugin_right_page object %}
+	</div>
+</div>
+<div class="row">
+    <div class="col col-md-12">
+        {% plugin_full_width_page object %}
+    </div>
+</div>
+{% endblock %}

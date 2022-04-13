@@ -1,0 +1,123 @@
+{% extends 'ixservices/generic/object.html' %}
+{% load helpers %}
+{% load plugins %}
+{% load tz %}
+
+{% block breadcrumbs %}
+{{ block.super }}
+<li class="breadcrumb-item"><a href="{% url 'plugins:ixservices:as_list' %}">ASNs</a></li>
+{% endblock %}
+
+{% block extra_controls %}
+    {% if perms.ixservices.change_customerservice %}
+        <div class="dropdown">
+            <button id="add-device-components" type="button" class="btn btn-sm btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="mdi mdi-plus-thick" aria-hidden="true"></i> Add CustomerService
+            </button>
+            <ul class="dropdown-menu" aria-labeled-by="add-device-components">               
+                {% if perms.ixservices.add_customerservice %}
+                    <li>
+                        <a class="dropdown-item" href="{% url 'plugins:ixservices:customerservice_add' %}?asn={{ object.pk }}&service__service_type=1&return_url={% url 'plugins:ixservices:as' pk=object.pk %}">
+                            ATMv4
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="{% url 'plugins:ixservices:customerservice_add' %}?asn={{ object.pk }}&service__service_type=2&return_url={% url 'plugins:ixservices:as' pk=object.pk %}">
+                            ATMv6
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" href="{% url 'plugins:ixservices:customerservice_add' %}?asn={{ object.pk }}&service__service_type=3&return_url={% url 'plugins:ixservices:as' pk=object.pk %}">
+                            Bilateral
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="row">
+	<div class="col col-md-7">
+        <div class="card">
+            <h5 class="card-header">
+                ASN
+            </h5>
+            <div class="card-body">
+                <table class="table table-hover attr-table">
+                    <tr>
+                        <th scope="row">AS Number</th>
+                        <td>{{ object.number|placeholder }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Description</th>
+                        <td>{{ object.description|placeholder }}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="card">
+            <h5 class="card-header">
+                IXs
+            </h5>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col col-md-4 text-center">
+                        <h2><a href="{% url 'plugins:ixservices:ix_list' %}" class="btn {% if stats.total_ix %}btn-success{% else %}btn-outline-dark{% endif %} btn-lg">{{ stats.total_ix }}</a></h2>
+                        <p>Total</p>
+                    </div>
+                    {% if stats.total_ix %}
+                    {% for item in stats.total_by_ix %}
+                        <div class="col col-md-4 text-center">
+                            <h2><a href="{% url 'plugins:ixservices:customerservice_list' %}?asn={{ object.pk }}&service__ix={{ item.service__ix }}" class="btn {% if item.service__ix %}btn-primary{% else %}btn-outline-dark{% endif %} btn-lg">{{ item.service__count }}</a></h2>
+                            <p><a href="{% url 'plugins:ixservices:ix' pk=item.service__ix %}">{{ item.service__ix__code }}</a></p>
+                        </div>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        {% include 'inc/panels/custom_fields.html' %}
+        {% include 'inc/panels/tags.html' %}
+        {% include 'inc/panels/comments.html' %}
+        {% plugin_left_page object %}
+    </div>
+    <div class="col col-md-5">
+        <div class="card">
+            <h5 class="card-header">
+                Stats
+            </h5>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col col-md-4 text-center">
+                        <h2><a href="{% url 'plugins:ixservices:customerservice_list' %}?asn={{ object.pk }}" class="btn {% if stats.total_services %}btn-success{% else %}btn-outline-dark{% endif %} btn-lg">{{ stats.total_services }}</a></h2>
+                        <p>Services (total)</p>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col col-md-4 text-center">
+                        <h2><a href="{% url 'plugins:ixservices:customerservice_list' %}?asn={{ object.pk }}&service__service_type=1" class="btn {% if stats.total_atmv4 %}btn-primary{% else %}btn-outline-dark{% endif %} btn-lg">{{ stats.total_atmv4 }}</a></h2>
+                        <p>ATMv4s</p>
+                    </div>
+                    <div class="col col-md-4 text-center">
+                        <h2><a href="{% url 'plugins:ixservices:customerservice_list' %}?asn={{ object.pk }}&service__service_type=2" class="btn {% if stats.total_atmv6 %}btn-primary{% else %}btn-outline-dark{% endif %} btn-lg">{{ stats.total_atmv6 }}</a></h2>
+                        <p>ATMv6s</p>
+                    </div>
+                    <div class="col col-md-4 text-center">
+                        <h2><a href="{% url 'plugins:ixservices:customerservice_list' %}?asn={{ object.pk }}&service__service_type=3" class="btn {% if stats.total_bilateral %}btn-primary{% else %}btn-outline-dark{% endif %} btn-lg">{{ stats.total_bilateral }}</a></h2>
+                        <p>Bilaterais</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% plugin_right_page object %}
+	</div>
+</div>
+<div class="row">
+    <div class="col col-md-12">
+        {% plugin_full_width_page object %}
+    </div>
+</div>
+{% endblock %}

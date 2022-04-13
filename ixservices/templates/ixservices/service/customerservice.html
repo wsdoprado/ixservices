@@ -1,0 +1,157 @@
+{% extends 'ixservices/generic/object.html' %}
+{% load helpers %}
+{% load plugins %}
+{% load tz %}
+
+{% block breadcrumbs %}
+{{ block.super }}
+<li class="breadcrumb-item"><a href="{% url 'plugins:ixservices:customerservice_list' %}">CustomerServices</a></li>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+	<div class="col col-md-7">
+        <div class="card">
+            <h5 class="card-header">
+                CustomerService
+            </h5>
+            <div class="card-body">
+                <table class="table table-hover attr-table">
+                    <tr>
+                        <th scope="row">ASN</th>
+                        <td>
+                            {% if object.asn %}
+                                <a href="{{ object.asn.get_absolute_url }}">{{ object.asn }}</a>
+                            {% else %}
+                                <span class="text-muted">None</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">IX</th>
+                        <td>
+                            {% if object.service.ix %}
+                                <a href="{{ object.service.ix.get_absolute_url }}">{{ object.service.ix }}</a>
+                            {% else %}
+                                <span class="text-muted">None</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Service</th>
+                        <td>
+                            {% if object.asn %}
+                                <a href="{{ object.service.get_absolute_url }}">{{ object.service }}</a>
+                            {% else %}
+                                <span class="text-muted">None</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                 
+                    <tr>
+                        <th scope="row">Ipv4Address</th>
+                        <td>
+                            {% if object.mlpav4_address %}
+                                <a href="{{ object.mlpav4_address.get_absolute_url }}">{{ object.mlpav4_address }}</a>
+                            {% else %}
+                                <span class="text-muted">None</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Ipv6Address</th>
+                        <td>
+                            {% if object.mlpav6_address %}
+                                <a href="{{ object.mlpav4_address.get_absolute_url }}">{{ object.mlpav6_address }}</a>
+                            {% else %}
+                                <span class="text-muted">None</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">MACAdress</th>
+                        <td>
+                            {% if object.get_mac_address %}
+                            {% for mac in object.get_mac_address %}
+                                <a href="{{ mac.get_absolute_url }}">{{ mac }}</a>
+                            {% endfor %}
+                            {% else %}
+                                <span class="text-muted">None</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Description</th>
+                        <td>{{ object.description|placeholder }}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        {% include 'inc/panels/custom_fields.html' %}
+        {% include 'inc/panels/tags.html' %}
+        {% include 'inc/panels/comments.html' %}
+        {% plugin_left_page object %}
+    </div>
+    <div class="col col-md-5">
+        <div class="card">
+            <h5 class="card-header">
+                CustomerConnection
+            </h5>
+            <div class="card-body">
+                <table class="table table-hover attr-table">                   
+                    <tr>
+                        <th scope="row">Connection</th>
+                        <td>
+                            {% if object.connection %}
+                                <a href="{{ object.connection.get_absolute_url }}">{{ object.connection }}</a>
+                            {% else %}
+                                <span class="text-muted">None</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th scope="row">Device</th>
+                        <td>
+                            {% if object.connection and object.connection.connected_device %}
+                                <a href="{{ object.connection.connected_device.get_absolute_url }}">{{ object.connection.connected_device }}</a>
+                            {% else %}
+                                <span class="text-muted">None</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th scope="row">Site</th>
+                        <td>
+                            {% if object.connection and object.connection.connected_device %}
+                                <a href="{{ object.connection.connected_device.site.get_absolute_url }}">{{ object.connection.connected_device.site }}</a>
+                            {% else %}
+                                <span class="text-muted">None</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <th scope="row">Region</th>
+                        <td>
+                            {% if object.connection and object.connection.connected_device %}
+                                <a href="{{ object.connection.connected_device.site.region.get_absolute_url }}">{{ object.connection.connected_device.site.region }}</a>
+                            {% else %}
+                                <span class="text-muted">None</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+        </div>
+        {% plugin_right_page object %}
+	</div>
+</div>
+<div class="row">
+    <div class="col col-md-12">
+        {% plugin_full_width_page object %}
+    </div>
+</div>
+{% endblock %}

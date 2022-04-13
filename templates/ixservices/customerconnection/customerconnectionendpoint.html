@@ -1,0 +1,128 @@
+{% extends 'ixservices/generic/object.html' %}
+{% load helpers %}
+{% load plugins %}
+{% load tz %}
+
+{% block breadcrumbs %}
+{{ block.super }}
+<li class="breadcrumb-item"><a href="{% url 'plugins:ixservices:customerconnectionendpoint_list' %}">CustomerConnectionEndpoint</a></li>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+	<div class="col col-md-7">
+        <div class="card">
+            <h5 class="card-header">
+                CustomerConnectionEndpoint
+            </h5>
+            <div class="card-body">
+                <table class="table table-hover attr-table">
+                    <tr>
+                        <th scope="row">Customer Connection</th>
+                        <td>
+                            {% if object.customer_connection %}
+                                <a href="{{ object.customer_connection.get_absolute_url }}">{{ object.customer_connection }}</a>
+                            {% else %}
+                                <span class="text-muted">None</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">ASN</th>
+                        <td>
+                            {% if object.customer_connection.asn %}
+                                <a href="{{ object.customer_connection.asn.get_absolute_url }}">{{ object.customer_connection.asn }}</a>
+                            {% else %}
+                                <span class="text-muted">None</span>
+                            {% endif %}
+                        </td>
+                    </tr>                     
+                    <tr>
+                        <th scope="row">Configured Capacity</th>
+                        <td>{{ object.configured_capacity|placeholder }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Description</th>
+                        <td>{{ object.description|placeholder }}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        {% include 'inc/panels/custom_fields.html' %}
+        {% include 'inc/panels/tags.html' %}
+        {% include 'inc/panels/comments.html' %}
+        {% plugin_left_page object %}
+    </div>
+    <div class="col col-md-5">
+        <div class="card">
+            <h5 class="card-header">
+                Device
+            </h5>
+            <div class="card-body">
+                <table class="table table-hover attr-table">
+                    <tr>
+                        <th scope="row">Region</th>
+                        <td>
+                            {% if object.device.site.region %}
+                                <a href="{{ object.device.site.region.get_absolute_url }}">{{ object.device.site.region }}</a>
+                            {% else %}
+                                <span class="text-muted">None</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Site</th>
+                        <td>
+                            {% if object.device.site %}
+                                <a href="{{ object.device.site.get_absolute_url }}">{{ object.device.site }}</a>
+                            {% else %}
+                                <span class="text-muted">None</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Device</th>
+                        <td>
+                            {% if object.device %}
+                                <a href="{{ object.device.get_absolute_url }}">{{ object.device }}</a>
+                            {% else %}
+                                <span class="text-muted">None</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% if object.interface %}
+                    <tr>
+                        <th scope="row">Interface</th>
+                        <td>
+                            <a href="{{ object.interface.get_absolute_url }}">{{ object.interface }}</a>
+                        </td>
+                    </tr>
+                    {% endif %}
+                    {% if object.frontport %}
+                    <tr>
+                        <th scope="row">Frontport</th>
+                        <td>
+                            <a href="{{ object.frontport.get_absolute_url }}">{{ object.frontport }}</a>
+                        </td>
+                    </tr>
+                    {% endif %}
+                    {% if object.rearport %}
+                    <tr>
+                        <th scope="row">Rearport</th>
+                        <td>
+                            <a href="{{ object.rearport.get_absolute_url }}">{{ object.rearport }}</a>
+                        </td>
+                    </tr>
+                    {% endif %}
+                </table>
+            </div>
+        </div>
+        {% plugin_right_page object %}
+	</div>
+</div>
+<div class="row">
+    <div class="col col-md-12">
+        {% plugin_full_width_page object %}
+    </div>
+</div>
+{% endblock %}

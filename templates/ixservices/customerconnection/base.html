@@ -1,0 +1,49 @@
+{% extends 'ixservices/generic/object.html' %}
+{% load buttons %}
+{% load static %}
+{% load helpers %}
+{% load plugins %}
+
+{% block extra_controls %}
+    {% if perms.ixservices.change_customerconnectionendpoint %}
+        <div class="dropdown">
+            <button id="add-device-components" type="button" class="btn btn-sm btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="mdi mdi-plus-thick" aria-hidden="true"></i> Add Components
+            </button>
+            <ul class="dropdown-menu" aria-labeled-by="add-device-components">               
+                {% if perms.ixservices.add_customerconnectionendpoint %}
+                    <li>
+                        <a class="dropdown-item" href="{% url 'plugins:ixservices:customerconnectionendpoint_add' %}?customer_connection={{ object.pk }}&return_url={% url 'plugins:ixservices:customerconnection_customerconnectionendpoint' pk=object.pk %}">
+                            CustomerConnectionEndpoint
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    {% endif %}
+{% endblock %}
+
+{% block tab_items %}
+    <li role="presentation" class="nav-item">
+        <a href="{% url 'plugins:ixservices:customerconnection' pk=object.pk %}" class="nav-link{% if active_tab == 'customerconnection' %} active{% endif %}">
+            CustomerConnection
+        </a>
+    </li>
+
+    {% with customerconnectionendpoint_count=object.customerconnectionendpoint_count %}
+        {% if customerconnectionendpoint_count %}
+            <li role="presentation" class="nav-item">
+                <a class="nav-link {% if active_tab == 'customerconnectionendpoints' %} active{% endif %}" href="{% url 'plugins:ixservices:customerconnection_customerconnectionendpoint' pk=object.pk %}">CustomerConnectionEndpoints {% badge customerconnectionendpoint_count %}</a>
+            </li>
+        {% endif %}
+    {% endwith %}
+   
+    
+    {% if perms.extras.view_configcontext %}
+        <li role="presentation" class="nav-item">
+            <a href="{% url 'dcim:device_configcontext' pk=object.pk %}" class="nav-link{% if active_tab == 'config-context' %} active{% endif %}">
+                Config Context
+            </a>
+        </li>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,121 @@
+{% extends 'base/layout.html' %}
+{% load static %}
+{% load helpers %}
+{% load form_helpers %}
+
+{% block title %}Connect {{ connection_obj.full_name }}  to {{ termination_type|bettertitle }}{% endblock %}
+
+{% block content-wrapper %}
+  <div class="tab-content">
+    {% with data=form.instance %}
+      {% render_errors form %}
+      <form method="post">
+      {% csrf_token %}
+      {% for field in form.hidden_fields %}
+          {{ field }}
+      {% endfor %}
+      <div class="row my-3">
+          <div class="col col-md-5">
+              <div class="card h-100">
+                  <h5 class="card-header">
+                      CustomerConnection
+                  </h5>
+                  <div class="card-body">
+                      {% if data %}
+                          <div class="row mb-3">
+                              <label class="col-sm-3 col-form-label text-lg-end">Name</label>
+                              <div class="col">
+                                  <input class="form-control" value="{{ connection_obj.name }}" disabled />
+                              </div>
+                          </div>
+                          <div class="row mb-3">
+                              <label class="col-sm-3 col-form-label text-lg-end">Lag</label>
+                              <div class="col">
+                                <input class="form-control" value="{{ connection_obj.is_lag }}" disabled />
+                              </div>
+                          </div>
+                          <div class="row mb-3">
+                              <label class="col-sm-3 col-form-label text-lg-end">ASN</label>
+                              <div class="col">
+                                <input class="form-control" value="{{ connection_obj.asn }}" disabled />
+                              </div>
+                          </div>
+                          <div class="row mb-3">
+                            <label class="col-sm-3 col-form-label text-lg-end">Type</label>
+                            <div class="col">
+                              <input class="form-control" value="{{ connection_obj.connection_type }}" disabled />
+                            </div>
+                          </div>
+                          <div class="row mb-3">
+                            <label class="col-sm-3 col-form-label text-lg-end">Connected to device</label>
+                            <div class="col">
+                              <input class="form-control" value="{{ connection_obj.full_name }}" disabled />
+                            </div>
+                          </div>
+                        {% endif %}                     
+                  </div>
+              </div>
+          </div>
+          <div class="col col-md-2 flex-column justify-content-center align-items-center d-none d-md-flex">
+              <i class="mdi mdi-swap-horizontal-bold mdi-48px"></i>
+          </div>
+          <div class="col col-md-5">
+              <div class="card h-100">
+                  <h5 class="card-header">
+                    {{ termination_type|bettertitle }} to be Connected
+                  </h5>
+                  
+                  <div class="card-body">
+                    {% if 'region' in form.fields %}
+                    {% render_field form.region %}
+                    {% endif %}
+                    {% if 'site' in form.fields %}
+                    {% render_field form.site %}
+                    {% endif %}
+                    {% if 'device' in form.fields %}
+                    {% render_field form.device %}
+                    {% endif %}
+                    <div class="row mb-3">
+                      <label class="col-sm-3 col-form-label text-lg-end">Type</label>
+                      <div class="col">
+                          <input class="form-control" value="{{ termination_type|capfirst }}" disabled />
+                      </div>
+                    </div>
+                    {% if 'interface' in form.fields %}
+                    {% render_field form.interface %}
+                    {% endif %}   
+                    {% if 'frontport' in form.fields %}
+                    {% render_field form.frontport %}
+                    {% endif %}  
+                    {% if 'rearport' in form.fields %}
+                    {% render_field form.rearport %}
+                    {% endif %}  
+                  <!--{% render_field form.termination_id %}-->         
+                </div>
+                  
+              </div>
+          </div>
+      </div>
+      <div class="row my-3 justify-content-center">
+        <div class="col col-md-8">
+          <div class="card">
+            <h5 class="card-header">CustomerConnectionEndpoint</h5>
+            <div class="card-body">
+                {% render_field form.customer_connection %}
+                {% render_field form.configured_capacity %}
+                {% render_field form.description %}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row my-3">
+        <div class="col col-md-12 text-center">
+          <a href="{{ return_url }}" class="btn btn-outline-danger">Cancel</a>
+          <button type="submit" name="_update" class="btn btn-primary">Connect</button>
+        </div>
+      </div>
+    </form>
+    {% endwith %}
+  </div>
+{% endblock %}
+

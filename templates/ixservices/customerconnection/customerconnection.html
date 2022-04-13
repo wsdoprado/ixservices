@@ -1,0 +1,118 @@
+{% extends 'ixservices/customerconnection/base.html' %}
+{% load helpers %}
+{% load plugins %}
+{% load tz %}
+
+{% block breadcrumbs %}
+{{ block.super }}
+<li class="breadcrumb-item"><a href="{% url 'plugins:ixservices:customerconnection_list' %}">CustomerConnections</a></li>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+	<div class="col col-md-7">
+        <div class="card">
+            <h5 class="card-header">
+                CustomerConnection
+            </h5>
+            <div class="card-body">
+                <table class="table table-hover attr-table">
+                    <tr>
+                        <th scope="row">Name</th>
+                        <td>{{ object.name|placeholder }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Lag</th>
+                        <td>{{ object.is_lag|placeholder }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">ASN</th>
+                        <td>
+                            {% if object.asn %}
+                                <a href="{{ object.asn.get_absolute_url }}">{{ object.asn }}</a>
+                            {% else %}
+                                <span class="text-muted">None</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Device</th>
+                        <td>
+                            {% if object.connected_device %}
+                                <a href="{{ object.connected_device.get_absolute_url }}">{{ object.connected_device }}</a>
+                            {% else %}
+                                <span class="text-muted">None</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Region</th>
+                        <td>
+                            {% if object.connected_device %}
+                                <a href="{{ object.connected_device.site.region.get_absolute_url }}">{{ object.connected_device.site.region }}</a>
+                            {% else %}
+                                <span class="text-muted">None</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Type</th>
+                        <td>
+                            {% if object.connection_type %}
+                                <a href="{{ object.connection_type.get_absolute_url }}">{{ object.connection_type.connection_name }}</a>
+                            {% else %}
+                                <span class="text-muted">None</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Ticket</th>
+                        <td>{{ object.ticket|placeholder }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Description</th>
+                        <td>{{ object.description|placeholder }}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        {% include 'inc/panels/custom_fields.html' %}
+        {% include 'inc/panels/tags.html' %}
+        {% include 'inc/panels/comments.html' %}
+        {% plugin_left_page object %}
+    </div>
+    <div class="col col-md-5">
+        <div class="card">
+            <h5 class="card-header">
+                Stats
+            </h5>
+            <div class="card-body">
+                <div class="row">
+                    {% if stats.total_services %}
+                        <div class="col col-md-4 text-center">
+                            <h2><a href="#" class="btn {% if stats.total_services %}btn-success{% else %}btn-outline-dark{% endif %} btn-lg">{{ stats.total_services }}</a></h2>
+                            <p>Total services</p>
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="row">
+                    {% if stats.total_services %}
+                    {% for item in stats.customerservice %}
+                        <div class="col col-md-4 text-center">
+                            <h2><a href="{% url 'plugins:ixservices:customerservice_list' %}?asn={{ item.asn }}" class="btn {% if item %}btn-primary{% else %}btn-outline-dark{% endif %} btn-lg">{{ item.asn__count }}</a></h2>
+                            <p><a href="{% url 'plugins:ixservices:as' pk=item.asn %}">ASN: {{ item.asn__number }}</a></p>
+                        </div>
+                    {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% plugin_right_page object %}
+	</div>
+</div>
+<div class="row">
+    <div class="col col-md-12">
+        {% plugin_full_width_page object %}
+    </div>
+</div>
+{% endblock %}

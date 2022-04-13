@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% with config=settings.PLUGINS_CONFIG.ixservices %}
+        <h2 class="text-center" style="margin-top: 200px">
+            {% if asn %}
+                ASN: {{ asn.number|lower }}
+            {% else %}
+                Nenhum asn foi criado!
+            {% endif %}
+        </h2>
+    {% endwith %}
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends 'ixservices/customerconnection/base.html' %}
+{% load render_table from django_tables2 %}
+{% load helpers %}
+{% load static %}
+
+{% block content %}
+  <form method="post">
+    {% csrf_token %}
+    {% render_table endpoints_table 'inc/table.html' %}
+  </form>
+  {% include 'inc/paginator.html' with paginator=endpoints_table.paginator page=endpoints_table.page %}
+  {% table_config_form endpoints_table %}
+{% endblock %}

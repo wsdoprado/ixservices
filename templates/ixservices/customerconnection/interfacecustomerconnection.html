@@ -1,0 +1,74 @@
+{% load helpers %}
+{% load tz %}
+<div class="row">
+	<div class="col col-md-7">
+        <div class="card">
+            <h5 class="card-header">
+                CustomerConnection
+            </h5>
+            <div class="card-body">
+                {% if customerconnectionendpoint %}
+                <table class="table table-hover attr-table">
+                    <tr>
+                        <th scope="row">Name</th>
+                        <td>
+                            <a href="{{ customerconnection.get_absolute_url }}">{{ customerconnection.name|placeholder }}</a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Lag</th>
+                        <td>{{ customerconnection.is_lag|placeholder }}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">ASN</th>
+                        <td>
+                            {% if customerconnection.asn %}
+                                <a href="{{ customerconnection.asn.get_absolute_url }}">{{ customerconnection.asn }}</a>
+                            {% else %}
+                                <span class="text-muted">None</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Type</th>
+                        <td>
+                            {% if customerconnection.connection_type %}
+                                <a href="{{ customerconnection.connection_type.get_absolute_url }}">{{ customerconnection.connection_type.connection_name }}</a>
+                            {% else %}
+                                <span class="text-muted">None</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">ConnectionEndpoint</th>
+                        <td>
+                            {% if customerconnectionendpoint %}
+                                <a href="{{ customerconnectionendpoint.get_absolute_url }}">{{ customerconnectionendpoint.pk }}</a>
+                            {% else %}
+                                <span class="text-muted">None</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Services</th>
+                        <td>
+                            {% if  customerservice_count %}
+                                {{ customerservice_count }}
+                            {% else %}
+                                <span class="text-muted">None</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <th scope="row">Description</th>
+                        <td>{{ object.description|placeholder }}</td>
+                    </tr>
+                </table>
+                {% else %}
+                <span class="text-muted">Not Connected to Customer</span>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
